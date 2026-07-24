@@ -26,7 +26,7 @@ export interface PaginationMeta{
     totalPages:number,
     sortBy:[string,string][];
 }
-export interface PaginationLink{
+export interface PaginationLinks{
     first?:string;
     previous?:string;
     current:string;
@@ -36,5 +36,5 @@ export interface PaginationLink{
 export interface PaginatedUsersResponse{
     data:User[];
     meta:PaginationMeta;
-    link:PaginationLink;
+    links:PaginationLinks;
 }

@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+
+import { Component, inject, OnInit } from '@angular/core';
+import { UsersService } from '../../core/services/users';
+
 
 @Component({
   selector: 'app-users',
@@ -6,4 +9,16 @@ import { Component } from '@angular/core';
   templateUrl: './users.html',
   styleUrl: './users.css',
 })
-export class Users {}
+export class Users implements OnInit{
+  private readonly usersService=inject(UsersService);
+  ngOnInit(): void {
+    this.usersService.getUsers().subscribe({
+      next:response=>{
+        console.log(response);
+      },
+      error:error=>{
+        console.error(error);
+      },
+    })
+  }
+}
