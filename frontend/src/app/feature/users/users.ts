@@ -21,18 +21,27 @@ export class Users {
   loading=true;
   
   loadUsers(event:TableLazyLoadEvent):void{
+    const sortField=event.sortField;
+    const sortOrder=event.sortOrder;
     const rows=event.rows??5;
     const first=event.first??0;
     const page =first/rows+1;
+    const direction=sortOrder===1?'ASC':sortOrder===-1?'DESC':undefined
+    const sortBy=sortField && direction ?`${sortField}:${direction}`:undefined
 
     this.loading=true;
 
-    this.usersService.getUsers(page,rows).subscribe({
+    this.usersService.getUsers(page,rows,sortBy).subscribe({
       next:response=>{
       this.users=response.data;
       this.totalRecords=response.meta.totalItems;
       this.loading=false;
       this.chdR.detectChanges();
+      
+      console.log({
+        sortField: event.sortField,
+        sortOrder: event.sortOrder,
+      });
       console.log(response);
       },
       error:error=>{

@@ -9,10 +9,15 @@
     [rowsPerPageOptions]="[5,10,20]"
     (onLazyLoad)="loadUsers($event)"
 >
+
     <ng-template #header>
         <tr>
             <th>Id</th>
-            <th>First name</th>
+            
+            <th pSortableColumn="firstName">
+                First name 
+                <p-sortIcon field="firstName"/>
+            </th>
             <th>last name</th>
             <th>email</th>
             <th>Created at</th>
