@@ -40,7 +40,7 @@ export class UsersService {
         "email",
       ],
       filterableColumns:{
-        firsName:[FilterOperator.EQ],
+        firstName:[FilterOperator.EQ],
         lastName:[FilterOperator.EQ],
         email :[FilterOperator.EQ],
       },

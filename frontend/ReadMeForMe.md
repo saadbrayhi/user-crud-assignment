@@ -344,3 +344,120 @@ component starts
 .subscribe(...)
 
 starts the request and receives the response. Angular supports injecting services into components this way.
+
+
+
+*** OnInit and ngOnInit() are used because you want to load users when Angular creates the component.
+
+export class Users implements OnInit
+
+means:
+
+This component promises to implement Angular’s OnInit lifecycle interface.
+
+That interface requires this method:
+
+ngOnInit(): void
+Why not put the request directly in the class?
+
+The class is created first:
+
+const component = new Users();
+
+Then Angular initializes its inputs, dependencies, and template.
+
+After that, Angular calls:
+
+ngOnInit()
+
+So this is a good place for startup logic such as:
+
+loading users
+fetching API data
+setting initial values
+preparing the page
+
+Your flow is:
+
+Angular creates Users component
+→ injects UsersService
+→ calls ngOnInit()
+→ getUsers() sends the API request
+→ response is stored in this.users
+
+
+
+*** ngOnInit(): void {
+  this.usersService.getUsers().subscribe(...);
+}
+
+means:
+
+As soon as this users page is initialized, fetch the users from the backend
+
+
+
+*** [value]="users"
+
+passes your component array into the table.
+
+[loading]="loading"
+
+shows PrimeNG’s loading state while the HTTP request is waiting.
+
+<ng-template #body let-user>
+
+PrimeNG repeats this row for every object inside users.
+
+So if your array contains five users, this template creates five rows.
+
+
+
+
+*** <p-table [value]="users">
+
+p-table is the PrimeNG table component.
+
+It is not a native HTML <table>. PrimeNG controls it and adds features such as:
+
+loading state
+pagination
+sorting
+filtering
+reusable templates
+styling
+[value]="users"
+
+passes your component’s users array into PrimeNG.
+
+Conceptually:
+
+users array from TypeScript
+        ↓
+      p-table
+        ↓
+one table row for every user
+
+PrimeNG supports custom template sections for areas such as the header and body
+
+
+
+*** By calling this.cd.detectChanges(), you are explicitly telling Angular: "Hey, I just updated the users array and set loading to false. Please re-read these variables and update the HTML template immediately." This satisfies Angular's safety checks and gets rid of that red error in your console
+
+
+
+*** [paginator]="true"
+[rows]="5"
+[totalRecords]="totalRecords"
+[rowsPerPageOptions]="[5, 10, 20]"
+[lazy]="true"
+(onLazyLoad)="loadUsers($event)"
+
+Meaning:
+
+paginator: displays pagination controls.
+rows: number of users per page.
+totalRecords: total users in PostgreSQL, not only the current page.
+rowsPerPageOptions: lets the user change page size.
+lazy: data comes from the backend page by page.
+onLazyLoad: executes whenever PrimeNG needs data

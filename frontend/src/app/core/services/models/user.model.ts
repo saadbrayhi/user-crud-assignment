@@ -3,9 +3,9 @@ export interface User{
 id:number,
 firstName:string,
 lastName:string,
-emai:string,
+email:string,
 createdAt:string,
-UpdatedAt:string,
+updatedAt:string,
 }
 
 export interface CreateUserPayload{

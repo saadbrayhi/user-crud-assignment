@@ -1,1 +1,27 @@
-<p>users works!</p>
+<p-table
+    [value]="users"
+    [loading]="loading"
+    [tableStyle]="{'min-width':'60rem'}"
+    [lazy]="true"
+>
+    <ng-template #header>
+        <tr>
+            <th>Id</th>
+            <th>First name</th>
+            <th>last name</th>
+            <th>email</th>
+            <th>Created at</th>
+        </tr>
+    </ng-template>
+
+        <ng-template #body let-user>
+            <tr>
+                <td>{{user.id}}</td>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.createdAt}}</td>
+            </tr>
+        </ng-template>
+
+</p-table>
