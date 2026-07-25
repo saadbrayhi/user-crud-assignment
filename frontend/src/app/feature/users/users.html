@@ -3,6 +3,11 @@
     [loading]="loading"
     [tableStyle]="{'min-width':'60rem'}"
     [lazy]="true"
+    [paginator]="true"
+    [rows]="5"
+    [totalRecords]="totalRecords"
+    [rowsPerPageOptions]="[5,10,20]"
+    (onLazyLoad)="loadUsers($event)"
 >
     <ng-template #header>
         <tr>

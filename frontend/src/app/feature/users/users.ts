@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { UsersService } from '../../core/services/users';
 import { User } from '../../core/services/models/user.model';
 import { ChangeDetectorRef } from '@angular/core';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 @Component({
   selector: 'app-users',
@@ -12,15 +13,21 @@ import { ChangeDetectorRef } from '@angular/core';
 
 
 })
-export class Users implements OnInit{
+export class Users {
   private readonly usersService=inject(UsersService);
   private readonly chdR=inject(ChangeDetectorRef)
   users:User[]=[];
   totalRecords=0;
   loading=true;
+  
+  loadUsers(event:TableLazyLoadEvent):void{
+    const rows=event.rows??5;
+    const first=event.first??0;
+    const page =first/rows+1;
 
-  ngOnInit(): void {
-    this.usersService.getUsers().subscribe({
+    this.loading=true;
+
+    this.usersService.getUsers(page,rows).subscribe({
       next:response=>{
       this.users=response.data;
       this.totalRecords=response.meta.totalItems;
@@ -35,4 +42,5 @@ export class Users implements OnInit{
       },
     })
   }
-}
+
+  }

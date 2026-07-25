@@ -461,3 +461,43 @@ totalRecords: total users in PostgreSQL, not only the current page.
 rowsPerPageOptions: lets the user change page size.
 lazy: data comes from the backend page by page.
 onLazyLoad: executes whenever PrimeNG needs data
+
+
+
+*** loadUsers() is the function PrimeNG calls whenever the table needs data.
+
+loadUsers(event: TableLazyLoadEvent): void {
+  const rows = event.rows ?? 5;
+  const first = event.first ?? 0;
+  const page = first / rows + 1;
+}
+1. The function parameter
+event: TableLazyLoadEvent
+
+event is an object sent automatically by PrimeNG.
+
+It contains information about the table’s current state, such as:
+
+event.first
+event.rows
+event.sortField
+event.sortOrder
+event.filters
+
+For pagination, the important values are:
+
+first: index of the first row PrimeNG wants
+rows: number of rows per page
+
+
+
+*** const rows = event.rows ?? 5;
+
+The nullish coalescing operator ?? means:
+
+Use the value on the left, unless it is null or undefined.
+
+So this means:
+
+If event.rows exists → use it
+Otherwise → use 5
