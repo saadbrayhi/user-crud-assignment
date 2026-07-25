@@ -1,3 +1,10 @@
+<input
+pInputText
+type="text"
+placeholder="Search users"
+[(ngModel)]="searchValue"
+(ngModelChange)="onSearchChange()"
+/>
 <p-table
     [value]="users"
     [loading]="loading"

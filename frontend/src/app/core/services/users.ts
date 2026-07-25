@@ -10,12 +10,15 @@ export class UsersService {
   private readonly http=inject(HttpClient);
   private readonly apiUrl='http://localhost:3000/users';
 
-  getUsers(page:number,limit:number,sortBy?:string,):Observable<PaginatedUsersResponse>{
+  getUsers(page:number,limit:number,sortBy?:string,search?:string,):Observable<PaginatedUsersResponse>{
     let params=new HttpParams()
     .set('page',page)
     .set('limit',limit);
     if(sortBy){
       params=params.set('sortBy',sortBy);
+    }
+    if(search){
+      params=params.set('search',search);
     }
     return this.http.get<PaginatedUsersResponse>(this.apiUrl,{
       params,
