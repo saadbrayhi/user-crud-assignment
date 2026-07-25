@@ -501,3 +501,129 @@ So this means:
 
 If event.rows exists → use it
 Otherwise → use 5
+
+
+*** Meaning:
+
+userDialogVisible: controls whether the dialog is open.
+saving: disables the submit button while the API request is running
+
+
+*** Validators.email
+
+checks that the email has a valid email structure. Angular Reactive Forms supports grouped controls and validators in the component model
+
+
+
+*** userForm defines the form and validation.
+
+1. userForm
+userForm = this.formBuilder.nonNullable.group({
+  firstName: ['', [Validators.required]],
+  lastName: ['', [Validators.required]],
+  email: ['', [Validators.required, Validators.email]],
+});
+
+This creates a FormGroup with three controls.
+
+nonNullable
+this.formBuilder.nonNullable
+
+This means the form values are strings, not string | null.
+
+
+
+*** this.userForm.reset()
+
+Clears old form values and restores them to their defaults:
+
+firstName = ""
+lastName = ""
+email = ""
+
+This matters because otherwise reopening the dialog could show the previous user’s values
+
+
+
+*** this.userDialogVisible = true
+
+Your dialog likely uses:
+
+[(visible)]="userDialogVisible"
+
+Changing the property to true opens the PrimeNG dialog.
+
+Flow:
+
+Click Add user
+→ openCreateDialog()
+→ clear form
+→ show dialog
+
+
+
+*** Validation check
+if (this.userForm.invalid) {
+  this.userForm.markAllAsTouched();
+  return;
+}
+this.userForm.invalid
+
+Checks whether any control violates its validators.
+
+Examples:
+
+empty first name,
+empty last name,
+invalid email.
+
+
+
+markAllAsTouched()
+
+Marks every form field as touched.
+
+This is useful when you later display messages such as:
+
+First name is required
+Invalid email
+
+Without touching the fields, validation messages may not appear
+
+
+
+*** Reload the table
+if (this.lastTableEvent) 
+
+lastTableEvent stores the most recent PrimeNG table state, including:
+
+rows per page,
+sorting field,
+sorting order.
+
+The condition protects against calling loadUsers() before the table has emitted an event
+
+...this.lastTableEvent
+Copies all properties from the last event
+
+
+*** Full flow
+Click Save
+→ submitUser()
+→ validate form
+→ extract payload
+→ saving = true
+→ POST /users
+
+On success:
+
+saving = false
+→ close dialog
+→ reset form
+→ reload first page
+
+On failure:
+
+saving = false
+→ keep dialog open
+→ log/show error

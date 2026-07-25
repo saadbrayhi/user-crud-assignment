@@ -1,15 +1,24 @@
 import { TableModule } from 'primeng/table';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UsersService } from '../../core/services/users';
 import { User } from '../../core/services/models/user.model';
 import { ChangeDetectorRef } from '@angular/core';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { InputText } from "primeng/inputtext";
 import { FormsModule } from "@angular/forms";
+
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-users',
-  imports: [TableModule, InputText, FormsModule],
+  imports: [TableModule,FormsModule, ReactiveFormsModule,DialogModule,ButtonModule,InputTextModule],
   templateUrl: './users.html',
   styleUrl: './users.css',
 
@@ -18,11 +27,14 @@ import { FormsModule } from "@angular/forms";
 export class Users {
   private readonly usersService=inject(UsersService);
   private readonly chdR=inject(ChangeDetectorRef)
+  private readonly formBuilder=inject(FormBuilder)
   users:User[]=[];
   totalRecords=0;
   loading=true;
   searchValue='';
   lastTableEvent?:TableLazyLoadEvent;
+  userDialogVisible=false;
+  saving=false;
   
   loadUsers(event:TableLazyLoadEvent):void{
     this.lastTableEvent=event;
@@ -64,5 +76,42 @@ export class Users {
       first:0,
     });
   }
-
+  userForm = this.formBuilder.nonNullable.group({
+  firstName: ['', [Validators.required]],
+  lastName: ['', [Validators.required]],
+  email: ['', [Validators.required, Validators.email]],
+});
+openCreateDialog(): void {
+  this.userForm.reset();
+  this.userDialogVisible = true;
+}
+submitUser():void{
+    if (this.userForm.invalid) {
+    this.userForm.markAllAsTouched();
+    return;
   }
+  const payload=this.userForm.getRawValue();
+  this.saving=true;
+  this.usersService.createUser(payload).subscribe({
+    next: () => {
+      this.saving = true;
+      this.userDialogVisible = false;
+      this.userForm.reset();
+
+      if (this.lastTableEvent) {
+        this.loadUsers({
+          ...this.lastTableEvent,
+          first: 0,
+        });
+      }
+    },
+    error: error => {
+      this.saving = false;
+      console.error(error);
+    },
+  });
+  
+
+}
+
+}

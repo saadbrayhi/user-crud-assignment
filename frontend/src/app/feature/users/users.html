@@ -1,3 +1,8 @@
+<p-button
+  label="Add user"
+  icon="pi pi-plus"
+  (onClick)="openCreateDialog()"
+/>
 <input
 pInputText
 type="text"
@@ -42,3 +47,65 @@ placeholder="Search users"
         </ng-template>
 
 </p-table>
+<p-dialog
+  header="Create user"
+  [(visible)]="userDialogVisible"
+  [modal]="true"
+  [closable]="!saving"
+  [style]="{ width: '30rem' }"
+>
+  <form
+    [formGroup]="userForm"
+    (ngSubmit)="submitUser()"
+  >
+    <!-- PrimeNG form fields -->
+
+    <div>
+      <label for="firstName">First name </label>
+
+      <input
+        id="firstName"
+        pInputText
+        formControlName="firstName"
+      />
+    </div>
+
+    <div>
+      <label for="lastName">Last name </label>
+
+      <input
+        id="lastName"
+        pInputText
+        formControlName="lastName"
+      />
+    </div>
+
+    <div>
+      <label for="email">Email </label>
+
+      <input
+        id="email"
+        pInputText
+        type="email"
+        formControlName="email"
+      />
+    </div>
+
+    <div>
+      <p-button
+        type="button"
+        label="Cancel"
+        severity="secondary"
+        [disabled]="saving"
+        (onClick)="userDialogVisible = false"
+      />
+
+      <p-button
+        type="submit"
+        label="Save"
+        [loading]="saving"
+        [disabled]="userForm.invalid"
+      />
+    </div>
+  </form>
+</p-dialog>
