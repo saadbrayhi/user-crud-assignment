@@ -1,0 +1,16 @@
+.user-form {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.user-form input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 0.5rem;
+}

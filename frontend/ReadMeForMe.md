@@ -627,3 +627,13 @@ On failure:
 saving = false
 → keep dialog open
 → log/show error
+
+
+*** What setValue() does
+
+It fills the form with the selected user:
+
+Click Edit on Saad
+→ selectedUser = Saad
+→ form receives Saad’s information
+→ dialog opens

@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   CreateUserPayload,
+  UpdateUserPayload,
   PaginatedUsersResponse,
   User,
 } from './models/user.model';
@@ -32,6 +33,12 @@ export class UsersService {
 
   createUser(payload:CreateUserPayload):Observable<User>{
     return this.http.post<User>(this.apiUrl,payload);
+  }
+  updateUser(id:number,payload:UpdateUserPayload):Observable<User>{
+    return this.http.patch<User>(
+      `${this.apiUrl}/${id}`,
+      payload,
+    );
   }
 
 }

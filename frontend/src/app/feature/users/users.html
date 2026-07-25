@@ -1,5 +1,5 @@
 <p-button
-  label="Add user"
+  label="Create user"
   icon="pi pi-plus"
   (onClick)="openCreateDialog()"
 />
@@ -33,6 +33,7 @@ placeholder="Search users"
             <th>last name</th>
             <th>email</th>
             <th>Created at</th>
+            <th>Actions</th>
         </tr>
     </ng-template>
 
@@ -43,12 +44,23 @@ placeholder="Search users"
                 <td>{{user.lastName}}</td>
                 <td>{{user.email}}</td>
                 <td>{{user.createdAt}}</td>
+                
+                <td>
+                <p-button
+                    label="Edit"
+                    icon="pi pi-pencil"
+                    severity="secondary"
+                    (onClick)="openEditDialog(user)"
+                    />
+                </td>
+
             </tr>
         </ng-template>
 
 </p-table>
+
 <p-dialog
-  header="Create user"
+  [header]="selectedUser ? 'Edit user' : 'Create user'"
   [(visible)]="userDialogVisible"
   [modal]="true"
   [closable]="!saving"
@@ -57,54 +69,46 @@ placeholder="Search users"
   <form
     [formGroup]="userForm"
     (ngSubmit)="submitUser()"
+    class="user-form"
   >
-    <!-- PrimeNG form fields -->
+    <label for="firstName">First name</label>
+    <input
+      id="firstName"
+      pInputText
+      formControlName="firstName"
+    />
 
-    <div>
-      <label for="firstName">First name </label>
+    <label for="lastName">Last name</label>
+    <input
+      id="lastName"
+      pInputText
+      formControlName="lastName"
+    />
 
-      <input
-        id="firstName"
-        pInputText
-        formControlName="firstName"
-      />
-    </div>
+    <label for="email">Email</label>
+    <input
+      id="email"
+      pInputText
+      type="email"
+      formControlName="email"
+    />
 
-    <div>
-      <label for="lastName">Last name </label>
+    <div></div>
 
-      <input
-        id="lastName"
-        pInputText
-        formControlName="lastName"
-      />
-    </div>
-
-    <div>
-      <label for="email">Email </label>
-
-      <input
-        id="email"
-        pInputText
-        type="email"
-        formControlName="email"
-      />
-    </div>
-
-    <div>
-      <p-button
-        type="button"
-        label="Cancel"
-        severity="secondary"
-        [disabled]="saving"
-        (onClick)="userDialogVisible = false"
-      />
-
+    <div class="dialog-actions">
       <p-button
         type="submit"
         label="Save"
         [loading]="saving"
         [disabled]="userForm.invalid"
+      />
+
+      <p-button
+        type="button"
+        label="Cancel"
+        severity="secondary"
+        [disabled]="saving"
+        (onClick)="closeUserDialog()"
       />
     </div>
   </form>

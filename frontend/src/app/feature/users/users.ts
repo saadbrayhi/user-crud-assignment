@@ -35,6 +35,7 @@ export class Users {
   lastTableEvent?:TableLazyLoadEvent;
   userDialogVisible=false;
   saving=false;
+  selectedUser:User |null=null;
   
   loadUsers(event:TableLazyLoadEvent):void{
     this.lastTableEvent=event;
@@ -47,7 +48,6 @@ export class Users {
     const sortBy=sortField && direction ?`${sortField}:${direction}`:undefined
 
     const search = this.searchValue.trim();
-    this.loading=true;
 
     this.usersService.getUsers(page,rows,sortBy,search).subscribe({
       next:response=>{
@@ -81,20 +81,38 @@ export class Users {
   lastName: ['', [Validators.required]],
   email: ['', [Validators.required, Validators.email]],
 });
+
 openCreateDialog(): void {
+  this.selectedUser=null;
   this.userForm.reset();
   this.userDialogVisible = true;
 }
+
+openEditDialog(user:User):void{
+  this.selectedUser = user;
+  this.userForm.setValue({
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+  });
+
+  this.userDialogVisible = true;
+}
+
 submitUser():void{
     if (this.userForm.invalid) {
     this.userForm.markAllAsTouched();
     return;
   }
   const payload=this.userForm.getRawValue();
+
+    const request$ =this.selectedUser ? this.usersService.updateUser(this.selectedUser.id,payload): this.usersService.createUser(payload)
+    
   this.saving=true;
-  this.usersService.createUser(payload).subscribe({
+  request$.subscribe({
     next: () => {
-      this.saving = true;
+      this.saving = false;
+      this.selectedUser = null;
       this.userDialogVisible = false;
       this.userForm.reset();
 
@@ -110,8 +128,12 @@ submitUser():void{
       console.error(error);
     },
   });
-  
 
+}
+closeUserDialog(): void {
+  this.userDialogVisible = false;
+  this.selectedUser = null;
+  this.userForm.reset();
 }
 
 }
