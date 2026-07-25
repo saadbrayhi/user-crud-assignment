@@ -637,3 +637,8 @@ Click Edit on Saad
 → selectedUser = Saad
 → form receives Saad’s information
 → dialog opens
+
+
+
+*** <p-confirmDialog />
+PrimeNG’s ConfirmDialog is controlled through ConfirmationService; the accept callback runs only after the user confirms.

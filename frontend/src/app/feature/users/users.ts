@@ -5,20 +5,18 @@ import { User } from '../../core/services/models/user.model';
 import { ChangeDetectorRef } from '@angular/core';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { FormsModule } from "@angular/forms";
-
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder,ReactiveFormsModule,Validators,}from '@angular/forms';
 
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-users',
-  imports: [TableModule,FormsModule, ReactiveFormsModule,DialogModule,ButtonModule,InputTextModule],
+  imports: [TableModule,FormsModule, ReactiveFormsModule,DialogModule,ButtonModule,InputTextModule,ConfirmDialogModule],
+  providers:[ConfirmationService],
   templateUrl: './users.html',
   styleUrl: './users.css',
 
@@ -28,6 +26,8 @@ export class Users {
   private readonly usersService=inject(UsersService);
   private readonly chdR=inject(ChangeDetectorRef)
   private readonly formBuilder=inject(FormBuilder)
+  private readonly confirmationService=inject(ConfirmationService);
+
   users:User[]=[];
   totalRecords=0;
   loading=true;
@@ -130,10 +130,38 @@ submitUser():void{
   });
 
 }
-closeUserDialog(): void {
-  this.userDialogVisible = false;
-  this.selectedUser = null;
-  this.userForm.reset();
+  closeUserDialog(): void {
+    this.userDialogVisible = false;
+    this.selectedUser = null;
+    this.userForm.reset();
+  }
+
+confirmDelete(user: User): void {
+  this.confirmationService.confirm({
+    header: 'Delete user',
+    message: `Are you sure you want to delete ${user.firstName} ${user.lastName}?`,
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'Delete',
+    rejectLabel: 'Cancel',
+    acceptButtonStyleClass: 'p-button-danger',
+
+    accept: () => {
+      this.deleteUser(user.id);
+    },
+  });
+}
+
+private deleteUser(id: number): void {
+  this.usersService.deleteUser(id).subscribe({
+    next: () => {
+      if (this.lastTableEvent) {
+        this.loadUsers(this.lastTableEvent);
+      }
+    },
+    error: error => {
+      console.error(error);
+    },
+  });
 }
 
 }

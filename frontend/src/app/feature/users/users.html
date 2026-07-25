@@ -52,6 +52,13 @@ placeholder="Search users"
                     severity="secondary"
                     (onClick)="openEditDialog(user)"
                     />
+
+                <p-button
+                    label="Delete"
+                    icon="pi pi-trash"
+                    severity="danger"
+                    (onClick)="confirmDelete(user)"
+                />
                 </td>
 
             </tr>
@@ -113,3 +120,4 @@ placeholder="Search users"
     </div>
   </form>
 </p-dialog>
+<p-confirmDialog/>
