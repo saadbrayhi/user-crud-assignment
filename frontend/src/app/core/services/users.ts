@@ -13,7 +13,7 @@ import {
 })
 export class UsersService {
   private readonly http=inject(HttpClient);
-  private readonly apiUrl='http://localhost:3000/users';
+  private readonly apiUrl='https://user-crud-assignment.onrender.com/users';
 
   getUsers(page:number,limit:number,sortBy?:string,search?:string,):Observable<PaginatedUsersResponse>{
     let params=new HttpParams()
