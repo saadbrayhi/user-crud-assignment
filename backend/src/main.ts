@@ -22,7 +22,11 @@ const swaggerDocument = SwaggerModule.createDocument(
 SwaggerModule.setup('api', app, swaggerDocument);
 
   app.enableCors({
-    origin:"http://localhost:4200",
+    origin:[
+      "http://localhost:4200",
+      "https://user-crud-assignment-zeta.vercel.app",
+    ]
+
   });
   app.useGlobalPipes(
     new ValidationPipe({
