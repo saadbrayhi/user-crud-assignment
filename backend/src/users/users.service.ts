@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Paginate, type PaginateQuery,FilterOperator, paginate } from 'nestjs-paginate';
 
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -20,11 +21,10 @@ export class UsersService {
     if(existingUser){
       throw new ConflictException('a user with tis email is already exists')
     }
-    const user=this.userRepository.create(createUserDto);
 
+    const user=this.userRepository.create(createUserDto);
     return await this.userRepository.save(user);
   }
-
    async findAll(Query:PaginateQuery) {
     return paginate(Query,this.userRepository,{
       sortableColumns:[
@@ -48,7 +48,7 @@ export class UsersService {
       defaultSortBy:[['id','ASC']],
       defaultLimit:10,
       maxLimit:100,
-
+  
     });
   }
 
@@ -61,6 +61,7 @@ export class UsersService {
     }
     return user;
   }
+
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user=await this.userRepository.preload({

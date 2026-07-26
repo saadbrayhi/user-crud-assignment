@@ -13,14 +13,3 @@ export class CreateUserDto {
     @IsNotEmpty()
     email!:string;
 }
-
-
-
-
-
-
-
-
-
-
-

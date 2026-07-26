@@ -14,16 +14,16 @@ import { ConfigModule,ConfigService } from '@nestjs/config';
     }),
 
     UsersModule,TypeOrmModule.forRootAsync({
-    inject:[ConfigService],
-    useFactory:(configService:ConfigService)=>({    
-    type:'postgres',
-    host:configService.get<string>('DB_HOST'),
-    port: Number(configService.get<string>('DB_PORT')),
-    username: configService.get<string>('DB_USERNAME'),
-    password: configService.get<string>('DB_PASSWORD'),
-    database: configService.get<string>('DB_DATABASE'),
-    autoLoadEntities:true,
-    synchronize:true})
+      inject:[ConfigService],
+      useFactory:(configService:ConfigService)=>({    
+      type:'postgres',
+      url:process.env.DATABASE_URL,
+      autoLoadEntities:true,
+      synchronize:true,
+      ssl:{
+        rejectUnauthorized:false
+      }
+    })
   })],
   controllers: [AppController],
   providers: [AppService],
