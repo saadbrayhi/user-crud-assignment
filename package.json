@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@ionic/angular": "^8.8.15",
+    "standalone": "^0.0.1"
+  }
+}

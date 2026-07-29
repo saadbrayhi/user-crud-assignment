@@ -1,39 +1,36 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import{ValidationPipe} from "@nestjs/common";
+import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   const swaggerConfig = new DocumentBuilder()
-  .setTitle('Users CRUD API')
-  .setDescription(
-    'API documentation for the users CRUD assignment',
-  )
-  .setVersion('1.0')
-  .build();
+    .setTitle('Users CRUD API')
+    .setDescription('API documentation for the users CRUD assignment')
+    .setVersion('1.0')
+    .build();
 
-const swaggerDocument = SwaggerModule.createDocument(
-  app,
-  swaggerConfig,
-);
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 
-SwaggerModule.setup('api', app, swaggerDocument);
+  SwaggerModule.setup('api', app, swaggerDocument);
 
   app.enableCors({
-    origin:[
+    origin: [
       'http://localhost:4200',
       'https://user-crud-assignment-zeta.vercel.app',
+      'http://localhost:8100',
+      'http://localhost',
+      'https://localhost',
     ],
-
   });
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist:true,
+      whitelist: true,
       forbidNonWhitelisted: true,
-      transform:true,
-    })
+      transform: true,
+    }),
   );
   await app.listen(process.env.PORT ?? 3000);
 }
