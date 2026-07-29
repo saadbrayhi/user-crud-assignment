@@ -38,7 +38,7 @@ export class UsersService {
         email: [FilterOperator.EQ],
       },
 
-      defaultSortBy: [['id', 'ASC']],
+      defaultSortBy: [['firstName', 'ASC']],
       defaultLimit: 10,
       maxLimit: 100,
     });
