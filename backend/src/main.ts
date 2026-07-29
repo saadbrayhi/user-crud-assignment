@@ -22,6 +22,7 @@ async function bootstrap() {
       'https://user-crud-assignment-zeta.vercel.app',
       'http://localhost:8100',
       'http://localhost',
+      'capacitor://localhost',
       'https://localhost',
     ],
   });
